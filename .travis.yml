@@ -7,6 +7,13 @@ php:
     - '7.2'
     - '7.3'
 
+env:
+ global:
+  - MESSAGE="Tag Generated from TravisCI for build $TRAVIS_BUILD_NUMBER"
+  - CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+  - CI_PULL_REQUEST="$TRAVIS_PULL_REQUEST"
+  - CI_BRANCH="$TRAVIS_BRANCH"
+
 before_install: composer install
 
 script: ./vendor/bin/phpunit --configuration test/unit --coverage-clover coverage.xml
