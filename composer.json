@@ -27,7 +27,8 @@
         "php": "^5.6 || ^7.0",
         "guzzlehttp/guzzle": "^6.3.3",
         "microsoft/microsoft-graph": "^1.4.0",
-        "psr/log": "^1.0.2"
+        "psr/log": "^1.0.2",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "facebook/webdriver": "^1.5.0",
