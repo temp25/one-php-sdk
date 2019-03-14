@@ -4,7 +4,7 @@ OneDrive SDK for PHP
 [![Latest Stable Version](https://poser.pugx.org/krizalys/onedrive-php-sdk/v/stable)](https://packagist.org/packages/krizalys/onedrive-php-sdk)
 [![Total Downloads](https://poser.pugx.org/krizalys/onedrive-php-sdk/d/total.svg)](https://packagist.org/packages/krizalys/onedrive-php-sdk)
 [![Build Status](https://travis-ci.org/krizalys/onedrive-php-sdk.svg?branch=master)](https://travis-ci.org/krizalys/onedrive-php-sdk)
-[![Code Coverage](https://codecov.io/gh/krizalys/onedrive-php-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/krizalys/onedrive-php-sdk)
+[![codecov](https://codecov.io/gh/temp25/one-php-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/temp25/one-php-sdk)
 [![StyleCI](https://styleci.io/repos/23994489/shield?style=flat)](https://styleci.io/repos/23994489)
 
 OneDrive SDK for PHP is an open source library that allows [PHP][php]
