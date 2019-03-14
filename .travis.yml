@@ -13,4 +13,6 @@ script: ./vendor/bin/phpunit --configuration test/unit --coverage-clover coverag
 
 after_success:
     - 'bash <(curl --silent https://codecov.io/bash)'
+    - mkdir -p build/logs
+    - ./vendor/bin/phpunit --configuration test/unit --coverage-clover build/logs/clover.xml
     - travis_retry php vendor/bin/php-coveralls -v
