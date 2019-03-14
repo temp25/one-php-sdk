@@ -43,7 +43,7 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('http://uplo.ad/url', $sut->uploadUrl);
     }
 
-    public function testCompleteShouldReturnExpectedValue1()
+    public function testCompleteShouldReturnExpectedValue()
     {
         $item = $this->createMock(DriveItem::class);
         $item->method('getId')->willReturn('123abc');
@@ -68,17 +68,17 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('123abc', $actual->id);
     }
 	
-	public function testCompleteShouldReturnExpectedValue2()
+	public function testCompleteWithTextContentShouldReturnExpectedValue()
     {
         $item = $this->createMock(DriveItem::class);
-        $item->method('getId')->willReturn('123abc');
+        $item->method('getId')->willReturn('test123');
 
         $response = $this->createMock(GraphResponse::class);
         $response
 			->method('getStatus')
 			->will($this->returnCallback(
                 function() {
-					return $this->statusCallback();
+					return $this->testCallback([202, 201]);
                 }
             ));
         $response->method('getResponseAsObject')->willReturn($item);
@@ -104,37 +104,28 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
 			->method('eof')
 			->will($this->returnCallback(
                 function() {
-					return $this->eofCallback();
+					return $this->testCallback([false, true]);
                 }
             ));
-		
-        $sut           = new UploadSessionProxy($graph, $uploadSession, $content, ['range_size' => 348894]);
+		$options = [
+			'range_size' => 348894,
+			'type' => 'text/plain'
+		];
+        $sut           = new UploadSessionProxy($graph, $uploadSession, $content, $options);
         $actual        = $sut->complete();
         $this->assertInstanceOf(DriveItemProxy::class, $actual);
-        $this->assertSame('123abc', $actual->id);
+        $this->assertSame('test123', $actual->id);
     }
 	
-	protected function statusCallback()
+	protected function testCallback(array $values)
 	{
 		static $isInvoked = false;
 		
 		if(!$isInvoked) {
 			$isInvoked = true;
-			return 202;
+			return $values[0];
 		}
 		
-		return 201;
-	}
-	
-	protected function eofCallback()
-	{
-		static $isInvoked = false;
-		
-		if(!$isInvoked) {
-			$isInvoked = true;
-			return false;
-		}
-		
-		return $isInvoked;
+		return $values[1];
 	}
 }
