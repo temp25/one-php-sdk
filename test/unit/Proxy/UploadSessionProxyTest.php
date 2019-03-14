@@ -2,6 +2,7 @@
 
 namespace Test\Unit\Krizalys\Onedrive\Proxy;
 
+use Psr\Http\Message\StreamInterface;
 use Krizalys\Onedrive\Proxy\DriveItemProxy;
 use Krizalys\Onedrive\Proxy\UploadSessionProxy;
 use Microsoft\Graph\Graph;
