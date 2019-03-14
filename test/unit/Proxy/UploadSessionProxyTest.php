@@ -3,7 +3,6 @@
 namespace Test\Unit\Krizalys\Onedrive\Proxy;
 
 use GuzzleHttp\Psr7;
-use Psr\Http\Message\StreamInterface;
 use Krizalys\Onedrive\Proxy\DriveItemProxy;
 use Krizalys\Onedrive\Proxy\UploadSessionProxy;
 use Microsoft\Graph\Graph;
@@ -71,15 +70,8 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
 	
 	public static function testCallback()
 	{
-		$values = func_get_args();
-		static $isInvoked = false;
-		
-		if(!$isInvoked) {
-			$isInvoked = true;
-			return $values[0];
-		}
-		
-		return $values[1];
+		static $index = 0;
+		return func_get_args()[$index++];
 	}
 	
 	public static function getSampleContent()
@@ -96,15 +88,8 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
     {
         $item = $this->createMock(DriveItem::class);
         $item->method('getId')->willReturn('test123');
-
-        $response = $this->createMock(GraphResponse::class);
-        $response
-			->method('getStatus')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(202, 201);
-                }
-            ));
+		$response = $this->createMock(GraphResponse::class);
+        $response->method('getStatus')->will($this->onConsecutiveCalls(202, 201));
         $response->method('getResponseAsObject')->willReturn($item);
 
         $request = $this->createMock(GraphRequest::class);
@@ -116,16 +101,6 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $graph->method('createRequest')->willReturn($request);
 
         $uploadSession = $this->createMock(UploadSession::class);
-		
-		$stream = $this->createMock(StreamInterface::class);
-		$stream->method('getSize')->willReturn(348894);
-		$stream
-			->method('eof')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(false, true);
-                }
-            ));
 		$options = [
 			'range_size' => 348894,
 			'type' => 'text/plain'
@@ -147,13 +122,7 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $item->method('getId')->willReturn('test123');
 
         $response = $this->createMock(GraphResponse::class);
-        $response
-			->method('getStatus')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(202, 202);
-                }
-            ));
+        $response->method('getStatus')->will($this->onConsecutiveCalls(202, 202));
         $response->method('getResponseAsObject')->willReturn($item);
 
         $request = $this->createMock(GraphRequest::class);
@@ -166,15 +135,6 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
 
         $uploadSession = $this->createMock(UploadSession::class);
 		
-		$stream = $this->createMock(StreamInterface::class);
-		$stream->method('getSize')->willReturn(348894);
-		$stream
-			->method('eof')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(false, true);
-                }
-            ));
 		$options = [
 			'range_size' => 348894,
 			'type' => 'text/plain'
@@ -194,13 +154,7 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $item->method('getId')->willReturn('test123');
 
         $response = $this->createMock(GraphResponse::class);
-        $response
-			->method('getStatus')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(202, 503);
-                }
-            ));
+        $response->method('getStatus')->will($this->onConsecutiveCalls(202, 503));
         $response->method('getResponseAsObject')->willReturn($item);
 
         $request = $this->createMock(GraphRequest::class);
@@ -214,15 +168,6 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $uploadSession = $this->createMock(UploadSession::class);
 		$uploadSession->method('getUploadUrl')->willReturn('http://uplo.ad/url');
 		
-		$stream = $this->createMock(StreamInterface::class);
-		$stream->method('getSize')->willReturn(348894);
-		$stream
-			->method('eof')
-			->will($this->returnCallback(
-                function() {
-					return self::testCallback(false, true);
-                }
-            ));
 		$options = [
 			'range_size' => 348894,
 			'type' => 'text/plain'
