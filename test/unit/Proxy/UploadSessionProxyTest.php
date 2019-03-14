@@ -68,12 +68,6 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('123abc', $actual->id);
     }
 	
-	public static function testCallback()
-	{
-		static $index = 0;
-		return func_get_args()[$index++];
-	}
-	
 	public static function getSampleContent()
 	{
 		$content = "";
