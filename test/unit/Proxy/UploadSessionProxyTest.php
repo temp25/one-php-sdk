@@ -68,6 +68,18 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('123abc', $actual->id);
     }
 	
+	public static function testCallback(array $values)
+	{
+		static $isInvoked = false;
+		
+		if(!$isInvoked) {
+			$isInvoked = true;
+			return $values[0];
+		}
+		
+		return $values[1];
+	}
+	
 	public function testCompleteWithTextContentShouldReturnExpectedValue()
     {
         $item = $this->createMock(DriveItem::class);
@@ -78,7 +90,7 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
 			->method('getStatus')
 			->will($this->returnCallback(
                 function() {
-					return $this->testCallback([202, 201]);
+					return self::testCallback([202, 201]);
                 }
             ));
         $response->method('getResponseAsObject')->willReturn($item);
@@ -104,7 +116,7 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
 			->method('eof')
 			->will($this->returnCallback(
                 function() {
-					return $this->testCallback([false, true]);
+					return self::testCallback([false, true]);
                 }
             ));
 		$options = [
@@ -117,15 +129,4 @@ class UploadSessionProxyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test123', $actual->id);
     }
 	
-	protected function testCallback(array $values)
-	{
-		static $isInvoked = false;
-		
-		if(!$isInvoked) {
-			$isInvoked = true;
-			return $values[0];
-		}
-		
-		return $values[1];
-	}
 }
